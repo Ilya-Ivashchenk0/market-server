@@ -1,1 +1,0 @@
-export const dbUrl = process.env.NODE_ENV !== 'production' ? 'mongodb://127.0.0.1:27017/market' : process.env.DB_URL

@@ -1,7 +1,8 @@
-import mongoose from 'mongoose'
 import env from 'dotenv'
-import { dbUrl } from '../utils/checkProd'
 env.config()
+import mongoose from 'mongoose'
+import { dbUrl } from '../utils/checkProd'
+
 
 if (!dbUrl) {
   throw new Error('DB_URL is not defined in environment variables')

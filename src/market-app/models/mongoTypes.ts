@@ -28,9 +28,9 @@ const urlType = {
   trim: true
 }
 
-const phoneType = {
-  type: Number,
-  length: 10
+const booleanType = {
+  type: Boolean,
+  default: false
 }
 
 export {
@@ -38,5 +38,5 @@ export {
   passwordType,
   stringType,
   urlType,
-  phoneType
+  booleanType
 }
