@@ -1,21 +1,32 @@
-class ApiError extends Error {
+export class ApiError extends Error {
   status
-  errors: Error[] | undefined
 
-  constructor(status: number, message: string, errors?: Error[]) {
+  constructor(status: number, message: string) {
     super(message)
     this.status = status
-    this.errors = errors
   }
 
   static UnauthorizedError() {
     return new ApiError(401, 'Необходима авторизация!')
   }
 
-  static BadRequestError(message: string, errors: Error[] = []) {
-    return new ApiError(400, message, errors)
+  static BadRequestError(message: string) {
+    return new ApiError(400, message)
   }
 
-}
+  static ForbiddenError(message: string) {
+    return new ApiError(403, message)
+  }
 
-export default ApiError
+  static NotFoundError(message: string) {
+    return new ApiError(404, message)
+  }
+
+  static IncorrectLinkError(message: string) {
+    return new ApiError(400, message)
+  }
+
+  static LostRouteError(message: string) {
+    return new ApiError(404, message)
+  }
+}

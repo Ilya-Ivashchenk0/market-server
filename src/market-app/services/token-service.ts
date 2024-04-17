@@ -1,23 +1,23 @@
 import jwt from 'jsonwebtoken'
-import { jwtToken } from '../utils/checkProd'
+import { jwtAccsessToken, jwtRefreshToken } from '../utils/checkProd'
 import Token from '../models/token'
 
 class TokenService {
   createTokens(payload: object) {
-    if (!jwtToken) {
+    if (!jwtAccsessToken || !jwtRefreshToken) {
       throw new Error('JWT token is not defined')
     }
 
     const accessToken = jwt.sign(
       payload,
-      jwtToken,
-      { expiresIn: '30m' } // короткое время жизни для access token
+      jwtAccsessToken,
+      { expiresIn: '30m' } // время жизни для access token
     )
 
     const refreshToken = jwt.sign(
       payload,
-      jwtToken,
-      { expiresIn: '30d' } // долгое время жизни для refresh token
+      jwtRefreshToken,
+      { expiresIn: '30d' } // время жизни для refresh token
     )
 
     return { accessToken, refreshToken }
@@ -29,8 +29,34 @@ class TokenService {
       tokenData.refreshToken = refreshToken
       return tokenData.save()
     }
-    const token = await Token.create({ user: userId, refreshToken })
-    return token
+
+    return await Token.create({ user: userId, refreshToken })
+  }
+
+  async removeToken(refreshToken: string) {
+    return await Token.deleteOne({ refreshToken })
+  }
+
+  validateAccessToken(token: string) {
+    try {
+      if (jwtAccsessToken)
+        return jwt.verify(token, jwtAccsessToken)
+    } catch (e) {
+      return null
+    }
+  }
+
+  validateRefreshToken(token: string) {
+    try {
+      if (jwtRefreshToken)
+        return jwt.verify(token, jwtRefreshToken)
+    } catch (e) {
+      return null
+    }
+  }
+
+  async findToken(refreshToken: string) {
+    return await Token.findOne({ refreshToken })
   }
 }
 

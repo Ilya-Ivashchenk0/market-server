@@ -1,7 +1,8 @@
-import { IUser } from './types/UserTypes'
+import { Request } from 'express'
 
 export interface RequestWithUser extends Request {
-  user?: Partial<IUser>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  user?: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: any
 }
